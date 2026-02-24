@@ -1,4 +1,3 @@
--- [[ 0RANge Executor - Final Script Hub Edition ]] --
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -21,7 +20,7 @@ local Border = Instance.new("UIStroke", Main)
 Border.Thickness = 3
 Border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
--- SIDEBAR BUTTON (To open Script Hub)
+-- SIDEBAR BUTTON
 local SideBtn = Instance.new("TextButton", Main)
 SideBtn.Size = UDim2.new(0, 30, 0, 100)
 SideBtn.Position = UDim2.new(1, 2, 0.3, 0)
@@ -31,7 +30,7 @@ SideBtn.TextColor3 = Color3.fromRGB(255, 165, 0)
 SideBtn.Font = Enum.Font.GothamBold
 Instance.new("UICorner", SideBtn)
 
--- SCRIPT HUB PANEL (Initially hidden)
+-- SCRIPT HUB PANEL
 local HubFrame = Instance.new("Frame", Main)
 HubFrame.Size = UDim2.new(0, 150, 0, 250)
 HubFrame.Position = UDim2.new(1, 35, 0, 10)
@@ -49,157 +48,11 @@ HubTitle.Font = Enum.Font.GothamBold
 
 -- FUNCTIONS FOR HUB BUTTONS
 local function addHubBtn(name, callback)
+    local currentButtons = 0
+    for _, v in pairs(HubFrame:GetChildren()) do
+        if v:IsA("TextButton") then currentButtons = currentButtons + 1 end
+    end
+    
     local b = Instance.new("TextButton", HubFrame)
     b.Size = UDim2.new(0.9, 0, 0, 30)
-    b.Position = UDim2.new(0.05, 0, 0, 35 + (#HubFrame:GetChildren() * 35))
-    b.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    b.Text = name
-    b.TextColor3 = Color3.fromRGB(200, 200, 200)
-    b.Font = Enum.Font.Gotham
-    b.MouseButton1Click:Connect(callback)
-    Instance.new("UICorner", b)
-end
-
--- LOADING REQUESTED SCRIPTS
-addHubBtn("c00lgui", function()
-    loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-c00lgui-official-85084"))()
-end)
-
-addHubBtn("Ro-Xploit", function()
-    loadstring(game:HttpGet("https://scriptblox.com/raw/Universal-Script-RoXploit-by-KrystalTeam-9328"))()
-end)
-
-addHubBtn("FE Particles", function()
-    print("Executing FE Particles script...")
-    -- Your particle script here
-end)
-
--- TOGGLE HUB
-SideBtn.MouseButton1Click:Connect(function()
-    HubFrame.Visible = not HubFrame.Visible
-end)
-
--- TITLE BAR & CLOSE (X)
-local TitleBar = Instance.new("Frame", Main)
-TitleBar.Size = UDim2.new(1, 0, 0, 35)
-TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-TitleBar.BackgroundTransparency = 0.5
-
-local Title = Instance.new("TextLabel", TitleBar)
-Title.Text = "  0RANge Executor"
-Title.Size = UDim2.new(1, -40, 1, 0)
-Title.BackgroundTransparency = 1
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.Font = Enum.Font.GothamBold
-Title.TextXAlignment = Enum.TextXAlignment.Left
-
-local CloseBtn = Instance.new("TextButton", TitleBar)
-CloseBtn.Text = "X"
-CloseBtn.Size = UDim2.new(0, 35, 0, 35)
-CloseBtn.Position = UDim2.new(1, -35, 0, 0)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseBtn.BorderSizePixel = 0
-
--- EDITOR
-local Editor = Instance.new("TextBox", Main)
-Editor.Size = UDim2.new(0.94, 0, 0.55, 0)
-Editor.Position = UDim2.new(0.03, 0, 0.18, 0)
-Editor.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
-Editor.BackgroundTransparency = 0.4
-Editor.Text = ""
-Editor.PlaceholderText = "-- Paste your custom script here..."
-Editor.TextColor3 = Color3.fromRGB(255, 255, 255)
-Editor.Font = Enum.Font.Code
-Editor.MultiLine = true
-Editor.TextYAlignment = Enum.TextYAlignment.Top
-Editor.TextXAlignment = Enum.TextXAlignment.Left
-
--- MAIN BUTTONS (Execute, Clear, Scan)
-local function createMainBtn(text, pos, color)
-    local btn = Instance.new("TextButton", Main)
-    btn.Size = UDim2.new(0, 100, 0, 35)
-    btn.Position = pos
-    btn.BackgroundColor3 = color
-    btn.Text = text
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.Font = Enum.Font.GothamBold
-    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
-    return btn
-end
-
-local Scan = createMainBtn("SCAN", UDim2.new(0.05, 0, 0.8, 0), Color3.fromRGB(40, 40, 80))
-local Execute = createMainBtn("EXECUTE", UDim2.new(0.38, 0, 0.8, 0), Color3.fromRGB(30, 80, 30))
-local Clear = createMainBtn("CLEAR", UDim2.new(0.71, 0, 0.8, 0), Color3.fromRGB(80, 50, 20))
-
--- [[ NOTIFICATION SYSTEM ]] --
-local function ShowBadge(hasBackdoor)
-    local BadgeFrame = Instance.new("Frame", Screen)
-    BadgeFrame.Size = UDim2.new(0, 300, 0, 80)
-    BadgeFrame.Position = UDim2.new(1, 5, 0.8, 0)
-    BadgeFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    Instance.new("UICorner", BadgeFrame)
-    Instance.new("UIStroke", BadgeFrame).Color = Color3.fromRGB(255, 165, 0)
-
-    local Icon = Instance.new("ImageLabel", BadgeFrame)
-    Icon.Size = UDim2.new(0, 60, 0, 60)
-    Icon.Position = UDim2.new(0, 10, 0, 10)
-    Icon.Image = hasBackdoor and "rbxassetid://5314809914" or "rbxassetid://17650278331"
-    Icon.BackgroundTransparency = 1
-
-    local Msg = Instance.new("TextLabel", BadgeFrame)
-    Msg.Size = UDim2.new(0, 210, 0, 60)
-    Msg.Position = UDim2.new(0, 80, 0, 10)
-    Msg.BackgroundTransparency = 1
-    Msg.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Msg.Text = hasBackdoor and "YES!!! theres a backdoor in the game and you can hack FE" or "No backdoor in the game..."
-    Msg.TextWrapped = true
-    Msg.Font = Enum.Font.GothamMedium
-
-    BadgeFrame:TweenPosition(UDim2.new(1, -310, 0.8, 0), "Out", "Back", 0.5)
-    task.wait(4)
-    BadgeFrame:TweenPosition(UDim2.new(1, 5, 0.8, 0), "In", "Quad", 0.5)
-    task.delay(0.6, function() BadgeFrame:Destroy() end)
-end
-
--- BUTTON EVENTS
-Scan.MouseButton1Click:Connect(function()
-    local detected = false
-    if game.ReplicatedStorage:FindFirstChild("Handshake") or game.JointsService:FindFirstChild("Backdoor") then
-        detected = true
-    end
-    ShowBadge(detected)
-end)
-
-Execute.MouseButton1Click:Connect(function()
-    loadstring(Editor.Text)()
-end)
-
-Clear.MouseButton1Click:Connect(function() Editor.Text = "" end)
-
-CloseBtn.MouseButton1Click:Connect(function()
-    Main.Visible = false
-    local Reopen = Instance.new("TextButton", Screen)
-    Reopen.Size = UDim2.new(0, 50, 0, 50)
-    Reopen.Position = UDim2.new(0, 10, 0.5, 0)
-    Reopen.Text = "0R"
-    Reopen.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-    Reopen.TextColor3 = Color3.fromRGB(255, 165, 0)
-    Instance.new("UICorner", Reopen).CornerRadius = UDim.new(1, 0)
-    Reopen.MouseButton1Click:Connect(function()
-        Main.Visible = true
-        Reopen:Destroy()
-    end)
-end)
-
--- RGB LOOP
-spawn(function()
-    while true do
-        for i = 0, 1, 0.005 do
-            local color = Color3.fromHSV(i, 1, 1)
-            Border.Color = color
-            Title.TextColor3 = color
-            task.wait(0.01)
-        end
-    end
-end)
+    b.Position = UDim2.new(0.05, 0,
