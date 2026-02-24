@@ -173,4 +173,52 @@ local function ShowBadge(hasBackdoor)
     local Icon = Instance.new("ImageLabel", BadgeFrame)
     Icon.Size = UDim2.new(0, 60, 0, 60)
     Icon.Position = UDim2.new(0, 10, 0, 10)
-    Icon.Image = hasBackdoor and "rbxassetid://5314809914" or
+    Icon.Image = hasBackdoor and "rbxassetid://5314809914" or "rbxassetid://17650278331"
+    Icon.BackgroundTransparency = 1
+    local Msg = Instance.new("TextLabel", BadgeFrame)
+    Msg.Size = UDim2.new(0, 210, 0, 60)
+    Msg.Position = UDim2.new(0, 80, 0, 10)
+    Msg.BackgroundTransparency = 1
+    Msg.TextColor3 = Color3.white
+    Msg.Text = hasBackdoor and "YES!!! theres a backdoor in the game and you can hack FE" or "No backdoor in the game..."
+    Msg.TextWrapped = true
+    BadgeFrame:TweenPosition(UDim2.new(1, -310, 0.8, 0), "Out", "Back", 0.5)
+    task.wait(4)
+    BadgeFrame:TweenPosition(UDim2.new(1, 5, 0.8, 0), "In", "Quad", 0.5)
+    task.delay(0.6, function() BadgeFrame:Destroy() end)
+end
+
+Scan.MouseButton1Click:Connect(function()
+    local detected = game.ReplicatedStorage:FindFirstChild("Handshake") or false
+    ShowBadge(detected)
+end)
+
+Execute.MouseButton1Click:Connect(function() loadstring(Editor.Text)() end)
+Clear.MouseButton1Click:Connect(function() Editor.Text = "" end)
+
+CloseBtn.MouseButton1Click:Connect(function()
+    Main.Visible = false
+    local Reopen = Instance.new("TextButton", Screen)
+    Reopen.Size = UDim2.new(0, 50, 0, 50)
+    Reopen.Position = UDim2.new(0, 10, 0.5, 0)
+    Reopen.Text = "0R"
+    Reopen.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    Reopen.TextColor3 = Color3.fromRGB(255, 165, 0)
+    Instance.new("UICorner", Reopen).CornerRadius = UDim.new(1, 0)
+    Reopen.MouseButton1Click:Connect(function()
+        Main.Visible = true
+        Reopen:Destroy()
+    end)
+end)
+
+-- RGB LOOP
+spawn(function()
+    while true do
+        for i = 0, 1, 0.005 do
+            local color = Color3.fromHSV(i, 1, 1)
+            Border.Color = color
+            Title.TextColor3 = color
+            task.wait(0.01)
+        end
+    end
+end)
